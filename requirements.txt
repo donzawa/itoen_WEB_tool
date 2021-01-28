@@ -1,5 +1,5 @@
 streamlit==0.75.0
 pandas
-bs4
+bs4==0.0.1
 BeautifulSoup
 requests
