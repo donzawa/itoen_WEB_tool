@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import requests
-import kuchikomi_kinugawa_test as ku
 
 
 
@@ -25,6 +24,39 @@ area6_url = ['327550', '357704', '311782', '308220', '329500', '346367', '329088
 area7_url = ['331966', '314616', '336960', '327886', '347277', '357172']
 area8_url = ['314287', '315528', '350554', '357960', '329711', '301765', '362287']
 
+def kuchi(area_hotel, area_url):
+    data = []
+    a = 0
+    while a <= len(area_hotel) - 1:
+        num = area_url[a]
+        url = 'https://www.jalan.net/yad' + num + '/kuchikomi/'
+        hotel = area_hotel[a]
+        a += 1
+
+        res = requests.get(url)
+        soup = BeautifulSoup(res.content, 'html.parser')
+
+        categoryItems = soup.find_all('th')
+        kuchikomi_points = soup.find_all('td', attrs={'class': 'jlnpc-kuchikomi__catTable__point'})
+
+        details = {}
+
+        x = 0
+        while x <= len(categoryItems) - 1:
+            details[categoryItems[x].text] = float(kuchikomi_points[x].text)
+            x += 1
+
+        datum = details
+
+        datum['ホテル名'] = hotel
+        datum[soup.dt.text] = float(soup.find_all('span', attrs={'class', 'jlnpc-kuchikomi__point'})[0].text)
+
+        data.append(datum)
+
+    # df = pd.DataFrame(data)
+    # df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
+    return data
+
 
 
 menu1 = st.beta_expander('じゃらん口コミ点数確認')
@@ -42,7 +74,7 @@ with menu1.beta_container():
 
     if kuchi_check1:
         st.subheader(f'<{area[0]}　口コミデータ>')
-        data = ku.kuchikomi(area1_hotels, area1_url)
+        data = kuchi(area1_hotels, area1_url)
         df = pd.DataFrame(data)
         df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
         st.dataframe(df)
@@ -50,7 +82,7 @@ with menu1.beta_container():
 
     if kuchi_check2:
         st.subheader(f'<{area[1]}　　口コミデータ>')
-        data = ku.kuchikomi(area2_hotels, area2_url)
+        data = kuchi(area2_hotels, area2_url)
         df = pd.DataFrame(data)
         df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
         st.dataframe(df)
@@ -58,7 +90,7 @@ with menu1.beta_container():
 
     if kuchi_check3:
         st.subheader(f'<{area[2]}　　口コミデータ>')
-        data = ku.kuchikomi(area3_hotels, area3_url)
+        data = kuchi(area3_hotels, area3_url)
         df = pd.DataFrame(data)
         df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
         st.dataframe(df)
@@ -66,7 +98,7 @@ with menu1.beta_container():
 
     if kuchi_check4:
         st.subheader(f'<{area[3]}　　口コミデータ>')
-        data = ku.kuchikomi(area4_hotels, area4_url)
+        data = kuchi(area4_hotels, area4_url)
         df = pd.DataFrame(data)
         df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
         st.dataframe(df)
@@ -74,7 +106,7 @@ with menu1.beta_container():
 
     if kuchi_check5:
         st.subheader(f'<{area[4]}　　口コミデータ>')
-        data = ku.kuchikomi(area5_hotels, area5_url)
+        data = kuchi(area5_hotels, area5_url)
         df = pd.DataFrame(data)
         df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
         st.dataframe(df)
@@ -82,7 +114,7 @@ with menu1.beta_container():
 
     if kuchi_check6:
         st.subheader(f'<{area[5]}　　口コミデータ>')
-        data = ku.kuchikomi(area6_hotels, area6_url)
+        data = kuchi(area6_hotels, area6_url)
         df = pd.DataFrame(data)
         df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
         st.dataframe(df)
@@ -90,7 +122,7 @@ with menu1.beta_container():
 
     if kuchi_check7:
         st.subheader(f'<{area[6]}　　口コミデータ>')
-        data = ku.kuchikomi(area7_hotels, area7_url)
+        data = kuchi(area7_hotels, area7_url)
         df = pd.DataFrame(data)
         df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
         st.dataframe(df)
@@ -98,7 +130,7 @@ with menu1.beta_container():
 
     if kuchi_check8:
         st.subheader(f'<{area[7]}　　口コミデータ>')
-        data = ku.kuchikomi(area8_hotels, area8_url)
+        data = kuchi(area8_hotels, area8_url)
         df = pd.DataFrame(data)
         df = df[['ホテル名', '総合', '部屋', '風呂', '料理（朝食）', '料理（夕食）', '接客・サービス', '清潔感']]
         st.dataframe(df)
